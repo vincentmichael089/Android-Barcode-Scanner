@@ -23,6 +23,9 @@ import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.jar.Manifest
 import android.content.Context.WINDOW_SERVICE
+import android.content.Intent
+import android.net.Uri
+import android.support.v7.app.AlertDialog
 import android.view.WindowManager
 import android.util.DisplayMetrics
 
@@ -66,6 +69,16 @@ class MainActivity : AppCompatActivity() {
                 if(barcodes!!.size()>0){
                     tvBarcode.post{
                         tvBarcode.text = barcodes.valueAt(0).displayValue
+                    }
+
+                    if(isURL(barcodes.valueAt(0).displayValue)){
+
+                        val uris = Uri.parse(barcodes.valueAt(0).displayValue)
+                        val intent = Intent(Intent.ACTION_VIEW, uris)
+                        val bundle = Bundle()
+                        bundle.putBoolean("new_window", true)
+                        intent.putExtras(bundle)
+                        startActivity(intent)
                     }
                 }
             }
@@ -132,5 +145,14 @@ class MainActivity : AppCompatActivity() {
         barcodeDetector.release()
         cameraSource.stop()
         cameraSource.release()
+    }
+
+    fun isURL(url: String): Boolean {
+        try {
+            java.net.URL(url).openStream().close()
+            return true
+        } catch (ex: Exception) {
+        }
+        return false
     }
 }
