@@ -1,6 +1,7 @@
 package com.example.aftermath.barcode
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -11,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.vision.CameraSource
@@ -20,6 +22,11 @@ import com.google.android.gms.vision.barcode.BarcodeDetector
 
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.jar.Manifest
+import android.content.Context.WINDOW_SERVICE
+import android.view.WindowManager
+import android.util.DisplayMetrics
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,10 +35,20 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var barcodeDetector: BarcodeDetector
     private lateinit var cameraSource: CameraSource //link surface view with barcode detector
+    private lateinit var overlay: RelativeLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
+
+        val displayMetrics = DisplayMetrics()
+        val wm = applicationContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        wm.defaultDisplay.getMetrics(displayMetrics)
+
+        val screenWidth = displayMetrics.widthPixels
+        val screenHeight = displayMetrics.heightPixels
+
         setSupportActionBar(toolbar)
 
         svBarcode = findViewById(R.id.sv_barcode)
@@ -55,7 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        cameraSource =  CameraSource.Builder(this, barcodeDetector).setRequestedPreviewSize(1024,768).setRequestedFps(25f).setAutoFocusEnabled(true).build()
+        cameraSource =  CameraSource.Builder(this, barcodeDetector).setRequestedPreviewSize(screenHeight,screenWidth).setRequestedFps(60f).setAutoFocusEnabled(true).build()
 
         svBarcode.holder.addCallback(object: SurfaceHolder.Callback2{
             override fun surfaceRedrawNeeded(holder: SurfaceHolder?) {
