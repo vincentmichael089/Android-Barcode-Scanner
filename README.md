@@ -1,5 +1,5 @@
 # Android-Barcode-Scanner
-Barcode Scanner using Mobile Vision Google API
-
-source: https://www.youtube.com/watch?v=KBlQt7IsvM4 (Adifyr)
+Universal Barcode Scanner using Mobile Vision Google API,
+           
+learning source: https://www.youtube.com/watch?v=KBlQt7IsvM4 (Adifyr)
 
