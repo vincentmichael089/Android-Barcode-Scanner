@@ -29,6 +29,7 @@ import android.support.v7.app.AlertDialog
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.*
+import android.webkit.URLUtil
 
 
 class MainActivity : AppCompatActivity() {
@@ -104,13 +105,15 @@ class MainActivity : AppCompatActivity() {
                     tvBarcode.post{
                         val valueholder = barcodes.valueAt(0).displayValue
                         tvBarcode.text = valueholder
-//                        if(isURL(tvBarcode.text.toString())){
-//                            val bundle = Bundle()
-//                            val uris = Uri.parse(barcodes.valueAt(0).displayValue)
-//                            val intent = Intent(Intent.ACTION_VIEW, uris)
-//                            bundle.putBoolean("new_window", true)
-//                            intent.putExtras(bundle)
-//                        }
+                        val isValid = URLUtil.isValidUrl(tvBarcode.text.toString())
+
+                        if(isValid){
+                            tvBarcode.setTextColor(Color.parseColor("#9acd32"))
+                            tvBarcode.isClickable = true
+                        }else{
+                            tvBarcode.setTextColor(Color.WHITE)
+                            tvBarcode.isClickable = false
+                        }
                     }
                 }
             }
@@ -179,12 +182,12 @@ class MainActivity : AppCompatActivity() {
         cameraSource.release()
     }
 
-    fun isURL(url: String): Boolean {
-        try {
-            java.net.URL(url).openStream().close()
-            return true
-        } catch (ex: Exception) {
-        }
-        return false
-    }
+//    fun isURL(url: String): Boolean {
+//        try {
+//            java.net.URL(url).openStream().close()
+//            return true
+//        } catch (ex: Exception) {
+//        }
+//        return false
+//    }
 }

@@ -20,10 +20,13 @@
     <TextView
         android:id="@+id/tv_barcode"
         android:layout_width="match_parent"
-        android:layout_height="30sp"
+        android:layout_height="40sp"
+        android:textSize="18sp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="#60000000"
         android:textStyle="bold"
-        android:textColor="#9acd32"/>
+        android:textColor="#9acd32"
+        android:layout_marginBottom="20sp"/>
 
 </android.support.constraint.ConstraintLayout>
