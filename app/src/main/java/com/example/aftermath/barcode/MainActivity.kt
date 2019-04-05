@@ -22,6 +22,7 @@ import java.util.jar.Manifest
 import android.content.Context.WINDOW_SERVICE
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Handler
 import android.support.v7.app.AlertDialog
@@ -60,6 +61,33 @@ class MainActivity : AppCompatActivity() {
         svBarcode = findViewById(R.id.sv_barcode)
         tvBarcode = findViewById(R.id.tv_barcode)
 
+        tvBarcode.setOnClickListener(View.OnClickListener {
+            val builder = AlertDialog.Builder(this@MainActivity)
+
+            //TODO() //BAIKIN FUNGSI CHECKING URL, DI IF ELSE LANGSUNG TES BUILDER
+            val valueholder = tvBarcode.text.toString()
+            val bundle = Bundle()
+            val uris = Uri.parse(valueholder)
+            val intent = Intent(Intent.ACTION_VIEW, uris)
+            bundle.putBoolean("new_window", true)
+            intent.putExtras(bundle)
+
+            builder.setMessage("Do you want to visit ${valueholder}?")
+                    .setCancelable(true)
+                    .setPositiveButton("Yes", DialogInterface.OnClickListener {
+                        dialog, id -> startActivity(intent);
+                        dialog.cancel()
+
+                    })
+                    .setNegativeButton("No", DialogInterface.OnClickListener {
+                        dialog, id -> dialog.cancel()
+
+                        ///
+
+                    })
+            builder.create().show()
+        })
+
         barcodeDetector = BarcodeDetector.Builder(this).setBarcodeFormats(Barcode.ALL_FORMATS).build()
 
         barcodeDetector.setProcessor(object : Detector.Processor<Barcode>{
@@ -68,14 +96,12 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun receiveDetections(detections: Detector.Detections<Barcode>?) {
-                val builder = AlertDialog.Builder(this@MainActivity)
+
                 //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 val barcodes = detections?.detectedItems
 
-                if(barcodes!!.size()==1){
+                if(barcodes!!.size()>0){
                     tvBarcode.post{
-                        cameraSource.stop()
-
                         val valueholder = barcodes.valueAt(0).displayValue
                         tvBarcode.text = valueholder
 //                        if(isURL(tvBarcode.text.toString())){
@@ -85,30 +111,6 @@ class MainActivity : AppCompatActivity() {
 //                            bundle.putBoolean("new_window", true)
 //                            intent.putExtras(bundle)
 //                        }
-
-                        //TODO() //BAIKIN FUNGSI CHECKING URL, DI IF ELSE LANGSUNG TES BUILDER
-
-                            val bundle = Bundle()
-                            val uris = Uri.parse(valueholder)
-                            val intent = Intent(Intent.ACTION_VIEW, uris)
-                            bundle.putBoolean("new_window", true)
-                            intent.putExtras(bundle)
-
-                            builder.setMessage("Do you want to visit ${valueholder}?")
-                                    .setCancelable(false)
-                                    .setPositiveButton("Yes", DialogInterface.OnClickListener {
-                                        dialog, id -> startActivity(intent);
-                                        dialog.cancel()
-                                        recreate()
-                                    })
-                                    .setNegativeButton("No", DialogInterface.OnClickListener {
-                                        dialog, id -> dialog.cancel()
-                                        recreate()
-                                     ///
-
-                                    })
-                                    .setTitle("Alert!")
-                            builder.create().show()
                     }
                 }
             }
