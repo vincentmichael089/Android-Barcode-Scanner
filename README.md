@@ -1,7 +1,9 @@
 # Android-Barcode-Scanner
 Universal Barcode Scanner using Mobile Vision Google API
 
-White Text -> not url -> unclickable
+
+White Text -> not url -> unclickable 
+
 Green Text -> url -> clickable, start url in browser 
 
 learning source: 
